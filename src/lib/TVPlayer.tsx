@@ -1,7 +1,7 @@
+import { init, pause, resume } from "@noriginmedia/norigin-spatial-navigation";
 import cn from "classnames";
 import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
-import { pause, resume, init } from "@noriginmedia/norigin-spatial-navigation";
 
 import { useTVPlayerStore } from "./TVPlayerStore";
 import { TVPlayerProps } from "./TVPlayerTypes";
@@ -17,14 +17,6 @@ function extractYouTubeIdFromUrl(url: string) {
 }
 
 export const TVPlayer: React.FC<TVPlayerProps> = (props) => {
-  !props.disableInitNav &&
-    init({
-      debug: false,
-      visualDebug: false,
-      throttle: 100,
-      // options
-    });
-
   const { onReady, onStart, onPause, onPlay, onError, onEnded, onBuffer } =
     props;
 
@@ -63,9 +55,19 @@ export const TVPlayer: React.FC<TVPlayerProps> = (props) => {
   };
 
   useEffect(() => {
+    !props.disableInitNav &&
+      init({
+        debug: false,
+        visualDebug: false,
+        throttle: 100,
+        // options
+      });
+  }, [props.disableInitNav]);
+
+  useEffect(() => {
     props.disableNav ? pause() : resume();
-    return () => resume();
-  }, [props.disableNav]);
+    return () => pause();
+  }, [props.disableNav, pause, resume]);
 
   useEffect(() => {
     actions.setLight(props.light);

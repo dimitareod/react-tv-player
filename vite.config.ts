@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
-import { defineConfig } from "vite";
-
 import react from "@vitejs/plugin-react";
+import { resolve } from "path";
+import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,6 +13,19 @@ export default defineConfig({
     setupFiles: "./tests/setup.js",
   },
   build: {
-    outDir: "./demo",
+    lib: {
+      entry: resolve(__dirname, 'src/lib/index.ts'),
+      name: 'TVPlayer',
+      fileName: (format) => `react-tv-player.${format === 'es' ? 'js' : 'umd.js'}`,
+    },
+    rollupOptions: {
+      external: ['react', 'react-dom'],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+        },
+      },
+    },
   },
 });

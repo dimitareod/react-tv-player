@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useTVPlayerStore } from ".";
 
 const ACTIVITY_TIMEOUT = 4000;
@@ -37,6 +37,7 @@ export const useTVPlayerActivity = () => {
 
   useEffect(() => {
     startActivityTimer(activity);
+    return () => clearTimeout(timer.current);
   }, [activity, startActivityTimer]);
 
   useEffect(() => {
